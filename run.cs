@@ -52,6 +52,7 @@ class Program
 
         while ((line = Console.ReadLine()) != null)
         {
+            if (line == "") break;
             lines.Add(line);
         }
 
@@ -160,17 +161,17 @@ class Program
         char type,
         State state)
     {
-        int hallwayY = map.Where(kv => kv.Value == '.').Min(kv => kv.Key.Item2);
+        int hallwayY = map.Where(kv => kv.Value == '.').Min(kv => kv.Key.y);
         int targetX = GetTargetColumn(type);
 
         var roomCells = map.Keys
-            .Where(p => p.Item1 == targetX && p.Item2 > hallwayY && map[p] != '#')
-            .OrderBy(p => p.Item2)
+            .Where(p => p.x == targetX && p.y > hallwayY && map[p] != '#')
+            .OrderBy(p => p.y)
             .ToList();
 
         var roomEntranceXs = map.Keys
-            .Where(p => p.Item2 == hallwayY && map[p] != '#')
-            .Select(p => p.Item1)
+            .Where(p => p.y == hallwayY && map[p] != '#')
+            .Select(p => p.x)
             .Where(x => map.ContainsKey((x, hallwayY + 1)) && map[(x, hallwayY + 1)] != '#')
             .ToHashSet();
 
@@ -179,7 +180,7 @@ class Program
             bool belowAllSame = true;
             foreach (var cell in roomCells)
             {
-                if (cell.Item2 <= start.y) continue;
+                if (cell.y <= start.y) continue;
                 var occupant = state.Pods
                     .SelectMany(kv => kv.Value.Select(p => (type: kv.Key, pos: p)))
                     .FirstOrDefault(t => t.pos == cell);
@@ -261,14 +262,14 @@ class Program
             int d = kv.Value;
             if (pos == start) continue;
 
-            if (pos.Item2 == hallwayY)
+            if (pos.y == hallwayY)
             {
-                if (roomEntranceXs.Contains(pos.Item1)) continue;
+                if (roomEntranceXs.Contains(pos.x)) continue;
                 result.Add((pos, d));
                 continue;
             }
 
-            if (pos.Item1 != targetX) continue;
+            if (pos.x != targetX) continue;
             if (!canEnterRoom) continue;
             if (deepestFreeInRoom == null) continue;
             if (pos != deepestFreeInRoom.Value) continue;
