@@ -244,7 +244,7 @@ class Program
         (int x, int y)? deepestFreeInRoom = null;
         if (canEnterRoom && roomCells.Count > 0)
         {
-            for (int i = roomCells.Count - 1; i >= 0; i--)
+            for (int i = roomCells.Count() - 1; i >= 0; i--)
             {
                 var cell = roomCells[i];
                 bool occupiedByAny = state.Pods.Values.SelectMany(v => v).Any(p => p == cell);
