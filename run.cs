@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-// выжимка с данными ради ускорения
+// test 2 runtime error
 namespace First;
 
 class Program
